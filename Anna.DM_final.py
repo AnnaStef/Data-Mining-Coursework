@@ -9,20 +9,20 @@ def cluster_data_and_plot(file_location:str, eps:float, algorithm:str, min_sampl
     This function loads data from a csv file, clusters it using DBSCAN, and plots the data before and after clustering.
 
     Parameters:
-    filename (str): The path to the csv file containing the data.
+    file_location (str): The path to the csv file containing the data.
     eps (float): The maximum distance between two samples for them to be considered as in the same neighborhood.
     min_samples (int): The number of samples in a neighborhood for a point to be considered as a core point.
-    feature1 (str): The name of the first feature to be used for clustering.
-    feature2 (str): The name of the second feature to be used for clustering.
-    
+    data_col1 (str): The first column  for clustering.
+    data_col1 (str): The second column for clustering.
+   
     Returns:
     None
     """
-    # Load data into a DataFrame
+    # Loading dataset into DataFrame
     data = pd.read_csv(file_location)
     #droping end rows with NaN values
     data.dropna(how='all',inplace=True)
-    # Defining the column to be used for clustering and printing the data
+    # Defining the columns that used for clustering
     X = data[[data_col1, data_col2]]
     print(data)
     
@@ -30,7 +30,7 @@ def cluster_data_and_plot(file_location:str, eps:float, algorithm:str, min_sampl
     plt.scatter(X[data_col1], X[data_col2])
     plt.xlabel(data_col1)
     plt.ylabel(data_col2)
-    plt.title("Original Data")
+    plt.title("Original Data before Clustering")
     plt.show()
     
     # Initializing and fitting the DBSCAN model
@@ -45,7 +45,6 @@ def cluster_data_and_plot(file_location:str, eps:float, algorithm:str, min_sampl
     plt.xlabel(data_col1)
     plt.ylabel(data_col2)
     plt.title("Clustered Data")
-    
     plt.show()
 
 #Reading and clustering
