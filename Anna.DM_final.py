@@ -1,7 +1,7 @@
 import pandas as pd
 import matplotlib.pyplot as plt
 from sklearn.cluster import DBSCAN
-from sklearn.decomposition import PCA
+
 
 
 def cluster_data_and_plot(file_location:str, eps:float, algorithm:str, min_samples:int, data_col1:str, data_col2:str):
