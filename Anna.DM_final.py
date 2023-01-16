@@ -1,7 +1,7 @@
 import pandas as pd
 import matplotlib.pyplot as plt
 from sklearn.cluster import DBSCAN
-
+from sklearn.decomposition import PCA
 
 
 def cluster_data_and_plot(file_location:str, eps:float, algorithm:str, min_samples:int, data_col1:str, data_col2:str):
@@ -25,6 +25,9 @@ def cluster_data_and_plot(file_location:str, eps:float, algorithm:str, min_sampl
     # Defining the columns that used for clustering
     X = data[[data_col1, data_col2]]
     print(data)
+    #printing statistical values of data
+    d = data.describe()
+    print(d)
     
     # Plotting the original data
     plt.scatter(X[data_col1], X[data_col2])
@@ -33,9 +36,15 @@ def cluster_data_and_plot(file_location:str, eps:float, algorithm:str, min_sampl
     plt.title("Original Data before Clustering")
     plt.show()
     
+    #PCA analysis
+    pca_week = PCA(n_components=2)
+    principalComponents_week = pca_week.fit_transform(X)
+    principal_week_Df = pd.DataFrame(data = principalComponents_week, columns = ['principal component 1', 'principal component 2'])
+    print(principal_week_Df)
+    
     # Initializing and fitting the DBSCAN model
     dbscan = DBSCAN(eps=eps, min_samples=min_samples)
-    dbscan.fit(X)
+    dbscan.fit(principalComponents_week)
 
     # Cluster labels for each data point
     labels = dbscan.labels_
@@ -49,4 +58,3 @@ def cluster_data_and_plot(file_location:str, eps:float, algorithm:str, min_sampl
 
 #Reading and clustering
 cluster_data_and_plot(file_location="C:\\Users\\shobi\\OneDrive\\Desktop\\Anna\\DM\\Sales_Transactions_Dataset_Weekly.csv", eps=4.5, algorithm= 'kd_tree', min_samples=25, data_col1="W21", data_col2="W0")
-
