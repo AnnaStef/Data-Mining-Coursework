@@ -9,42 +9,43 @@ def cluster_data_and_plot(file_location:str, eps:float, algorithm:str, min_sampl
     This function loads data from a csv file, clusters it using DBSCAN, and plots the data before and after clustering.
 
     Parameters:
-    file_location (str): The path to the csv file containing the data.
+    filename (str): The path to the csv file containing the data.
     eps (float): The maximum distance between two samples for them to be considered as in the same neighborhood.
     min_samples (int): The number of samples in a neighborhood for a point to be considered as a core point.
-    data_col1 (str): The first column  for clustering.
-    data_col1 (str): The second column for clustering.
-   
+    feature1 (str): The name of the first feature to be used for clustering.
+    feature2 (str): The name of the second feature to be used for clustering.
+    
     Returns:
     None
     """
-    # Loading dataset into DataFrame
+    # Load data into a DataFrame
     data = pd.read_csv(file_location)
     #droping end rows with NaN values
     data.dropna(how='all',inplace=True)
-    # Defining the columns that used for clustering
-    X = data[[data_col1, data_col2]]
     print(data)
-    #printing statistical values of data
     d = data.describe()
     print(d)
+    del data['Product_Code']
+    # Defining the column to be used for clustering and printing the data
+    X = data[[data_col1, data_col2]]
+    print(data)
+    
+    #PCA analysis
+    pca_week = PCA(n_components=2)
+    principalComponents_week = pca_week.fit_transform(data)
+    principal_week_Df = pd.DataFrame(data = principalComponents_week, columns = ['principal component 1', 'principal component 2'])
+    print(principal_week_Df)
     
     # Plotting the original data
     plt.scatter(X[data_col1], X[data_col2])
     plt.xlabel(data_col1)
     plt.ylabel(data_col2)
-    plt.title("Original Data before Clustering")
+    plt.title("Original Data")
     plt.show()
-    
-    #PCA analysis
-    pca_week = PCA(n_components=2)
-    principalComponents_week = pca_week.fit_transform(X)
-    principal_week_Df = pd.DataFrame(data = principalComponents_week, columns = ['principal component 1', 'principal component 2'])
-    print(principal_week_Df)
     
     # Initializing and fitting the DBSCAN model
     dbscan = DBSCAN(eps=eps, min_samples=min_samples)
-    dbscan.fit(principalComponents_week)
+    dbscan.fit(X)
 
     # Cluster labels for each data point
     labels = dbscan.labels_
@@ -58,3 +59,4 @@ def cluster_data_and_plot(file_location:str, eps:float, algorithm:str, min_sampl
 
 #Reading and clustering
 cluster_data_and_plot(file_location="C:\\Users\\shobi\\OneDrive\\Desktop\\Anna\\DM\\Sales_Transactions_Dataset_Weekly.csv", eps=4.5, algorithm= 'kd_tree', min_samples=25, data_col1="W21", data_col2="W0")
+
